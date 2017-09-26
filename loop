@@ -1,0 +1,15 @@
+done = True
+level_start = False
+level_end = False
+
+while done is False:
+    #display start screen
+    level_start = True
+    while level_start is True and level_end is False:
+        #level goes on
+        game_end = True
+    while game_end is True and done is False:
+        #end screen
+        done = True
+
+
