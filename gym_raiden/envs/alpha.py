@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+import os
 
 pygame.init()
 
@@ -23,6 +24,10 @@ size = (700, 900)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("alpha")  # set the title of the game to alpha
 
+instrucfont = pygame.font.SysFont('freesansbold.ttf', 50)
+
+path = os.getcwd()
+
 # load background
 x_speed = 0
 y_speed = 0
@@ -39,13 +44,13 @@ en_y_dir = 0
 playerdead = False  # Boolean value for player state
 bgtime = 0  # set the background time to zero initially
 time = 0  # initial value of time
-b1 = "gym_raiden/envs/resources/background2.jpg"  # background image name
+b1 = path + "/envs/resources/background2.jpg"  # background image name
 game_start = True
 game_end = False
-enemy_pic = "gym_raiden/envs/resources/a-01.png"  # default image for enemy
+enemy_pic = path + "/envs/resources/a-01.png"  # default image for enemy
 
 # --- background music
-##pygame.mixer.music.load("gym_raiden/envs/resources/level1.mp3")  # play music as soon as the game start
+##pygame.mixer.music.load(path + "/envs/resources/level1.mp3")  # play music as soon as the game start
 ##pygame.mixer.music.play(-1)  # loop around if music ends
 
 
@@ -57,7 +62,7 @@ back2 = pygame.image.load(b1).convert()
 ##class background(pygame.sprite.Sprite):
 ##    def __init__(self):
 ##        pygame.sprite.Sprite.__init__(self)
-##        self.image = pygame.image.load("gym_raiden/envs/resources/background.png").convert()
+##        self.image = pygame.image.load(path + "/envs/resources/background.png").convert()
 ##        self.rect = self.image.get_rect()
 ##
 ##    def update_Up(self):
@@ -69,7 +74,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         # self.image=pygame.Surface([width,height])
         # self.image.fill(color)
-        self.image = pygame.image.load("gym_raiden/envs/resources/p02.png").convert_alpha()  # set the player icon
+        self.image = pygame.image.load(path + "/envs/resources/p02.png").convert_alpha()  # set the player icon
         self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
         self.rect.x = x_coord
@@ -186,7 +191,7 @@ class Player(pygame.sprite.Sprite):
 class hitbox(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("gym_raiden/envs/resources/hitbox.png").convert()
+        self.image = pygame.image.load(path + "/envs/resources/hitbox.png").convert()
         self.image.set_colorkey(WHITE)
         ##        pygame.draw.ellipse(self.image, YELLOW, [0,0, 7, 7])
         self.rect = self.image.get_rect()
@@ -199,7 +204,7 @@ class hitbox(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("gym_raiden/envs/resources/pb.png").convert_alpha()
+        self.image = pygame.image.load(path + "/envs/resources/pb.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = x_coord
         self.rect.y = y_coord
@@ -292,7 +297,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.y >= 150 and self.rect.x == 550:
             self.rect.y += self.y_offset
         elif self.rect.y < 150:
-            # self.image = pygame.transform.rotate(pygame.image.load(gym_raiden/envs/resources/enemy_pic).convert_alpha(), self.rotate)
+            # self.image = pygame.transform.rotate(pygame.image.load(resources/enemy_pic).convert_alpha(), self.rotate)
             # self.rotate += 1.15
             self.turn += 1
             self.rect.x = self.radius * math.sin(self.turn / 50) + 450
@@ -356,7 +361,7 @@ class en_Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, angle):
         pygame.sprite.Sprite.__init__(self)
         self.angle = -math.radians(angle - 135)
-        self.image = pygame.image.load("gym_raiden/envs/resources/bullet3.png").convert_alpha()
+        self.image = pygame.image.load(path + "/envs/resources/bullet3.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.move = [x, y]
         self.speed_magnitude = 5
@@ -457,7 +462,7 @@ def enemytype2():
 def enemytype3():
     if time % 30 == 0 and 1 < time%300 < 200:
         enemy3 = Enemy()
-        enemy3.image = pygame.image.load("gym_raiden/envs/resources/z-01.png").convert_alpha()
+        enemy3.image = pygame.image.load(path + "/envs/resources/z-01.png").convert_alpha()
         enemy3.hp = 4
         enemy3.rect.x = 0
         enemy3.rect.y = 900
@@ -478,7 +483,7 @@ def enemytype4():
 def enemytype5():
     if time % 100 == 0:
         enemy1 = Enemy()
-        enemy1.image = pygame.image.load("gym_raiden/envs/resources/a-03.png").convert_alpha()
+        enemy1.image = pygame.image.load(path + "/envs/resources/a-03.png").convert_alpha()
         enemy1.hp = 4
         enemy1.turn = 3.1415926535898 * 25
         enemy1.rect.x = 550
@@ -487,7 +492,7 @@ def enemytype5():
         enemy1_group.add(enemy1)
     if (time + 50) % 100 == 0:
         enemy4 = Enemy()
-        enemy4.image = pygame.image.load("gym_raiden/envs/resources/a-04.png").convert_alpha()
+        enemy4.image = pygame.image.load(path + "/envs/resources/a-04.png").convert_alpha()
         enemy4.hp = 4
         enemy4.rect.x = 150
         enemy4.rect.y = 900
@@ -499,7 +504,7 @@ def enemytype6():
     global enemy2
     if time % 30 == 0 and 0 < time % 300 < 200:
         enemy2 = Enemy()
-        enemy2.image = pygame.image.load("gym_raiden/envs/resources/s-01.png").convert_alpha()
+        enemy2.image = pygame.image.load(path + "/envs/resources/s-01.png").convert_alpha()
         enemy2.hp = 1
         enemy2.crash_dmg = 40
         enemy2.y_offset = -5
@@ -512,7 +517,7 @@ def enemytype6():
 def enemytype7():
     if time % 50 == 0 and 1 < time % 500 < 220:
         enemy5 = Enemy()
-        enemy5.image = pygame.image.load("gym_raiden/envs/resources/a-01.png").convert_alpha()
+        enemy5.image = pygame.image.load(path + "/envs/resources/a-01.png").convert_alpha()
         enemy5.hp = 4
         enemy5.rect.x = -20
         enemy5.rect.y = 150
@@ -521,7 +526,7 @@ def enemytype7():
         enemy5_group.add(enemy5)
     if (time + 25) % 50 == 0 and 1 < time % 500 < 220:
         enemy6 = Enemy()
-        enemy6.image = pygame.image.load("gym_raiden/envs/resources/a-02.png").convert_alpha()
+        enemy6.image = pygame.image.load(path + "/envs/resources/a-02.png").convert_alpha()
         enemy6.hp = 4
         enemy6.rect.x = 720
         enemy6.rect.y = 150
@@ -533,7 +538,7 @@ def enemytype7():
 def enemytype8():
     if time % 30 == 0 and 1 < time % 600 < 200:
         enemy5 = Enemy()
-        enemy5.image = pygame.image.load("gym_raiden/envs/resources/a-01.png").convert_alpha()
+        enemy5.image = pygame.image.load(path + "/envs/resources/a-01.png").convert_alpha()
         enemy5.hp = 4
         enemy5.rect.x = -20
         enemy5.rect.y = 150
@@ -542,7 +547,7 @@ def enemytype8():
         enemy5_group.add(enemy5)
     if time % 30 == 0 and 200 < time % 600 < 400:
         enemy6 = Enemy()
-        enemy6.image = pygame.image.load("gym_raiden/envs/resources/a-02.png").convert_alpha()
+        enemy6.image = pygame.image.load(path + "/envs/resources/a-02.png").convert_alpha()
         enemy6.hp = 4
         enemy6.rect.x = 720
         enemy6.rect.y = 150
@@ -555,7 +560,7 @@ def enemytower():
     global enemyt
     if time % 300 == 0:
         enemyt = Enemy()
-        enemyt.image = pygame.image.load("gym_raiden/envs/resources/t-01.png").convert_alpha()
+        enemyt.image = pygame.image.load(path + "/envs/resources/t-01.png").convert_alpha()
         enemyt.hp = 10
         enemyt.crash_dmg = 50
         enemyt.score = 50
@@ -572,7 +577,7 @@ def enemyboss1():
     boss1.crash_dmg = 100
     boss1.rect.x = 350
     boss1.rect.y = 100
-    boss1.image = pygame.image.load("gym_raiden/envs/resources/boss1.png").convert_alpha()
+    boss1.image = pygame.image.load(path + "/envs/resources/boss1.png").convert_alpha()
     boss1.rect = boss1.image.get_rect()
     allSprites.add(boss1)
     boss_group.add(boss1)
@@ -709,13 +714,13 @@ def step(hitbox=hitbox):
     p_bullet = Bullet()
     # if player.playershoot == True:
     #     p_bullet = Bullet()
-    #     p_bullet.image = pygame.image.load("gym_raiden/envs/resources/pb.png").convert_alpha()
+    #     p_bullet.image = pygame.image.load(path + "/envs/resources/pb.png").convert_alpha()
     #     if time % p_bullet.gap == 0:
     #         p_bullet.rect.x = player.rect.centerx-3
     #         p_bullet.rect.y = player.rect.centery-18
     #         p_bullet_group.add(p_bullet)
     #         allSprites.add(p_bullet)
-    # #                pygame.mixer.music.load("gym_raiden/envs/resources/shoot.mp3")
+    # #                pygame.mixer.music.load(path + "/envs/resources/shoot.mp3")
     # #                pygame.mixer.music.play(-1)
 
     # --- Remove bullet outside the screen
@@ -928,16 +933,6 @@ def step(hitbox=hitbox):
 
     # --- Limit to 60 frames per second
     clock.tick(60)
-
-screen, ins_font = render_init(screen)
-while True:
-    step()
-    screen, ins_font = render(ins_font, screen)
-
-
-# Close the window and quit.
-pygame.quit()
-
 
 
 def render_end(screen):

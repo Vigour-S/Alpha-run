@@ -1,6 +1,7 @@
 import gym
 import gym_raiden.envs.alpha as alpha
 import pygame
+from gym import spaces
 
 NUM_GAME_STATUS_STATES = 3
 IN_GAME, WIN, DEAD = list(range(NUM_GAME_STATUS_STATES))
@@ -14,10 +15,15 @@ class Raiden_ENV(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
+        alpha.render_init(alpha.screen)
         self.status = IN_GAME
+        self.action_space = spaces.Discrete(8)
+        (screen_width, screen_height) = alpha.size
+        self.observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, 3))
 
     def _step(self, action):
         self._take_action(action)
+        alpha.step()
         self.status = self.status_update()
         reward = self._get_reward()
         img_data = pygame.image.tostring(alpha.screen, "RGB")
@@ -35,7 +41,7 @@ class Raiden_ENV(gym.Env):
 
     def _take_action(self, action):
         """ Converts the action space into an action. """
-        action_type = ACTION_LOOKUP[action[0]]
+        action_type = ACTION_LOOKUP[action]
         if action_type == 'up':
             alpha.player.moveY(-5)
         elif action_type == 'down':
@@ -61,14 +67,18 @@ class Raiden_ENV(gym.Env):
         else:
             print('Unrecognized action %s' % action_type)
         alpha.player.playershoot = True
-        alpha.render()
 
     def _get_reward(self):
-        """ Reward is given for scoring a goal. """
+        """ Reward is achieving score. """
         return alpha.player.score
 
     def _reset(self):
-        alpha.game_start = False
+        alpha.game_end = False
+        return alpha.render_init(alpha.screen)
+
+    def _render(self, mode='human', close=False):
+        alpha.render(alpha.instrucfont, alpha.screen)
+
 
 
 ACTION_LOOKUP = {
@@ -80,6 +90,6 @@ ACTION_LOOKUP = {
     5 : 'up_right',
     6 : 'down_left',
     7 : 'down_right',
-    8 : 'still'
+    8 : 'noop'
 }
 
