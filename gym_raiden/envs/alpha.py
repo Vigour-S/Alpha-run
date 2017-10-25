@@ -1,7 +1,6 @@
 import pygame
 import random
 import math
-import os
 
 pygame.init()
 
@@ -20,10 +19,8 @@ N_BLUE = (0, 128, 255)
 clock = pygame.time.Clock()
 allSprites = pygame.sprite.Group()
 
-# Set the width and height of the screen [width, height]
 size = (700, 900)
 screen = pygame.display.set_mode(size)
-
 pygame.display.set_caption("alpha")  # set the title of the game to alpha
 
 # load background
@@ -42,13 +39,13 @@ en_y_dir = 0
 playerdead = False  # Boolean value for player state
 bgtime = 0  # set the background time to zero initially
 time = 0  # initial value of time
-b1 = "background2.jpg"  # background image name
-game_start = False
+b1 = "gym_raiden/envs/resources/background2.jpg"  # background image name
+game_start = True
 game_end = False
-enemy_pic = "a-01.png"  # default image for enemy
+enemy_pic = "gym_raiden/envs/resources/a-01.png"  # default image for enemy
 
 # --- background music
-##pygame.mixer.music.load("level1.mp3")  # play music as soon as the game start
+##pygame.mixer.music.load("gym_raiden/envs/resources/level1.mp3")  # play music as soon as the game start
 ##pygame.mixer.music.play(-1)  # loop around if music ends
 
 
@@ -60,7 +57,7 @@ back2 = pygame.image.load(b1).convert()
 ##class background(pygame.sprite.Sprite):
 ##    def __init__(self):
 ##        pygame.sprite.Sprite.__init__(self)
-##        self.image = pygame.image.load("background.png").convert()
+##        self.image = pygame.image.load("gym_raiden/envs/resources/background.png").convert()
 ##        self.rect = self.image.get_rect()
 ##
 ##    def update_Up(self):
@@ -72,7 +69,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         # self.image=pygame.Surface([width,height])
         # self.image.fill(color)
-        self.image = pygame.image.load("p02.png").convert_alpha()  # set the player icon
+        self.image = pygame.image.load("gym_raiden/envs/resources/p02.png").convert_alpha()  # set the player icon
         self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
         self.rect.x = x_coord
@@ -166,30 +163,30 @@ class Player(pygame.sprite.Sprite):
         if pressed[pygame.K_z]:  # if key z is pressed, then shoot bullet
             self.playershoot = True
 
-        # User let up on a key
-        if event.type == pygame.KEYUP:
-            # If it is an arrow key, reset vector back to zero
-            # Old ver for moving
-            ##            if event.key == pygame.K_LEFT:
-            ##                self.move(0,0)
-            ##            elif event.key == pygame.K_RIGHT:
-            ##                self.move(0,0)
-            ##            if event.key == pygame.K_UP:
-            ##                self.move(0,0)
-            ##            elif event.key == pygame.K_DOWN:
-            ##                self.move(0,0)
-            ##            if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-            ##                self.moveY(0)
-            ##            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-            ##                self.moveX(0)
-            if event.key == pygame.K_z:
-                self.playershoot = False
+        # # User let up on a key
+        # if event.type == pygame.KEYUP:
+        #     # If it is an arrow key, reset vector back to zero
+        #     # Old ver for moving
+        #     ##            if event.key == pygame.K_LEFT:
+        #     ##                self.move(0,0)
+        #     ##            elif event.key == pygame.K_RIGHT:
+        #     ##                self.move(0,0)
+        #     ##            if event.key == pygame.K_UP:
+        #     ##                self.move(0,0)
+        #     ##            elif event.key == pygame.K_DOWN:
+        #     ##                self.move(0,0)
+        #     ##            if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+        #     ##                self.moveY(0)
+        #     ##            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+        #     ##                self.moveX(0)
+        #     if event.key == pygame.K_z:
+        #         self.playershoot = False
 
 
 class hitbox(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("hitbox.png").convert()
+        self.image = pygame.image.load("gym_raiden/envs/resources/hitbox.png").convert()
         self.image.set_colorkey(WHITE)
         ##        pygame.draw.ellipse(self.image, YELLOW, [0,0, 7, 7])
         self.rect = self.image.get_rect()
@@ -202,7 +199,7 @@ class hitbox(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("pb.png").convert_alpha()
+        self.image = pygame.image.load("gym_raiden/envs/resources/pb.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = x_coord
         self.rect.y = y_coord
@@ -295,7 +292,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.y >= 150 and self.rect.x == 550:
             self.rect.y += self.y_offset
         elif self.rect.y < 150:
-            # self.image = pygame.transform.rotate(pygame.image.load(enemy_pic).convert_alpha(), self.rotate)
+            # self.image = pygame.transform.rotate(pygame.image.load(gym_raiden/envs/resources/enemy_pic).convert_alpha(), self.rotate)
             # self.rotate += 1.15
             self.turn += 1
             self.rect.x = self.radius * math.sin(self.turn / 50) + 450
@@ -359,7 +356,7 @@ class en_Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, angle):
         pygame.sprite.Sprite.__init__(self)
         self.angle = -math.radians(angle - 135)
-        self.image = pygame.image.load("bullet3.png").convert_alpha()
+        self.image = pygame.image.load("gym_raiden/envs/resources/bullet3.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.move = [x, y]
         self.speed_magnitude = 5
@@ -460,7 +457,7 @@ def enemytype2():
 def enemytype3():
     if time % 30 == 0 and 1 < time%300 < 200:
         enemy3 = Enemy()
-        enemy3.image = pygame.image.load("z-01.png").convert_alpha()
+        enemy3.image = pygame.image.load("gym_raiden/envs/resources/z-01.png").convert_alpha()
         enemy3.hp = 4
         enemy3.rect.x = 0
         enemy3.rect.y = 900
@@ -481,7 +478,7 @@ def enemytype4():
 def enemytype5():
     if time % 100 == 0:
         enemy1 = Enemy()
-        enemy1.image = pygame.image.load("a-03.png").convert_alpha()
+        enemy1.image = pygame.image.load("gym_raiden/envs/resources/a-03.png").convert_alpha()
         enemy1.hp = 4
         enemy1.turn = 3.1415926535898 * 25
         enemy1.rect.x = 550
@@ -490,7 +487,7 @@ def enemytype5():
         enemy1_group.add(enemy1)
     if (time + 50) % 100 == 0:
         enemy4 = Enemy()
-        enemy4.image = pygame.image.load("a-04.png").convert_alpha()
+        enemy4.image = pygame.image.load("gym_raiden/envs/resources/a-04.png").convert_alpha()
         enemy4.hp = 4
         enemy4.rect.x = 150
         enemy4.rect.y = 900
@@ -502,7 +499,7 @@ def enemytype6():
     global enemy2
     if time % 30 == 0 and 0 < time % 300 < 200:
         enemy2 = Enemy()
-        enemy2.image = pygame.image.load("s-01.png").convert_alpha()
+        enemy2.image = pygame.image.load("gym_raiden/envs/resources/s-01.png").convert_alpha()
         enemy2.hp = 1
         enemy2.crash_dmg = 40
         enemy2.y_offset = -5
@@ -515,7 +512,7 @@ def enemytype6():
 def enemytype7():
     if time % 50 == 0 and 1 < time % 500 < 220:
         enemy5 = Enemy()
-        enemy5.image = pygame.image.load("a-01.png").convert_alpha()
+        enemy5.image = pygame.image.load("gym_raiden/envs/resources/a-01.png").convert_alpha()
         enemy5.hp = 4
         enemy5.rect.x = -20
         enemy5.rect.y = 150
@@ -524,7 +521,7 @@ def enemytype7():
         enemy5_group.add(enemy5)
     if (time + 25) % 50 == 0 and 1 < time % 500 < 220:
         enemy6 = Enemy()
-        enemy6.image = pygame.image.load("a-02.png").convert_alpha()
+        enemy6.image = pygame.image.load("gym_raiden/envs/resources/a-02.png").convert_alpha()
         enemy6.hp = 4
         enemy6.rect.x = 720
         enemy6.rect.y = 150
@@ -536,7 +533,7 @@ def enemytype7():
 def enemytype8():
     if time % 30 == 0 and 1 < time % 600 < 200:
         enemy5 = Enemy()
-        enemy5.image = pygame.image.load("a-01.png").convert_alpha()
+        enemy5.image = pygame.image.load("gym_raiden/envs/resources/a-01.png").convert_alpha()
         enemy5.hp = 4
         enemy5.rect.x = -20
         enemy5.rect.y = 150
@@ -545,7 +542,7 @@ def enemytype8():
         enemy5_group.add(enemy5)
     if time % 30 == 0 and 200 < time % 600 < 400:
         enemy6 = Enemy()
-        enemy6.image = pygame.image.load("a-02.png").convert_alpha()
+        enemy6.image = pygame.image.load("gym_raiden/envs/resources/a-02.png").convert_alpha()
         enemy6.hp = 4
         enemy6.rect.x = 720
         enemy6.rect.y = 150
@@ -558,7 +555,7 @@ def enemytower():
     global enemyt
     if time % 300 == 0:
         enemyt = Enemy()
-        enemyt.image = pygame.image.load("t-01.png").convert_alpha()
+        enemyt.image = pygame.image.load("gym_raiden/envs/resources/t-01.png").convert_alpha()
         enemyt.hp = 10
         enemyt.crash_dmg = 50
         enemyt.score = 50
@@ -575,7 +572,7 @@ def enemyboss1():
     boss1.crash_dmg = 100
     boss1.rect.x = 350
     boss1.rect.y = 100
-    boss1.image = pygame.image.load("boss1.png").convert_alpha()
+    boss1.image = pygame.image.load("gym_raiden/envs/resources/boss1.png").convert_alpha()
     boss1.rect = boss1.image.get_rect()
     allSprites.add(boss1)
     boss_group.add(boss1)
@@ -583,42 +580,50 @@ def enemyboss1():
 
 # -------- Main Program Loop ------------------- Main Program Loop ------------------- Main Program Loop ----------
 
+def render_init(s):
+    # Set the width and height of the screen [width, height]
+    s.fill(BLACK)
+    myfont = pygame.font.SysFont('freesansbold.ttf', 80)
+    instrucfont = pygame.font.SysFont('freesansbold.ttf', 50)
+    nlabel = myfont.render('Press R to start', 2, L_GREEN)
+    instruction_1 = instrucfont.render('Press arrow key to move', 1, WHITE)
+    instruction_2 = instrucfont.render('Press Z to shoot', 1, WHITE)
+    s.blit(nlabel, (150, 230))
+    s.blit(instruction_1, (60, 700))
+    s.blit(instruction_2, (60, 750))
+    pygame.display.flip()
+
+    return s, instrucfont
 
 
-while done is False:
-    # --- End screen with game reset
-    while game_start is False:
-        screen.fill(BLACK)
-        myfont = pygame.font.SysFont('freesansbold.ttf', 80)
-        instrucfont = pygame.font.SysFont('freesansbold.ttf', 50)
-        nlabel = myfont.render('Press R to start', 2, L_GREEN)
-        instruction_1 = instrucfont.render('Press arrow key to move', 1, WHITE)
-        instruction_2 = instrucfont.render('Press Z to shoot', 1, WHITE)
-        screen.blit(nlabel, (150, 230))
-        screen.blit(instruction_1, (60, 700))
-        screen.blit(instruction_2, (60, 750))
-        pygame.display.flip()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:  # If user clicked close
-                done = True
-                game_start = True
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:
-                    game_start = True
-                    game_end = False
+def render(instrucfont, s):
+    # --- Blit screens
+    p_score = instrucfont.render('Score:' + str(player.score), 1, N_BLUE)
+    p_live = instrucfont.render('Live:' + str(player.live), 1, N_BLUE)
+    p_hp = instrucfont.render('HP:' + str(player.hp) + '/100', 1, N_BLUE)
+
+    # --- Screen-clearing code goes here
+    s.fill(BLACK)
+
+    # --- Background scrolling
+    s.blit(back, (0, bgtime))
+    s.blit(back, (0, bgtime - 900))
+
+    s.blit(p_score, (15, 20))
+    s.blit(p_hp, (300, 20))
+    s.blit(p_live, (580, 20))
+
+    allSprites.draw(s)
+    pygame.display.flip()
+
+    return s, instrucfont
+
+def step(hitbox=hitbox):
+
+    global game_end, time, bgtime
 
     # --- Start screen that will display instructions
     while game_end == True:
-        screen.fill(WHITE)
-        myfont = pygame.font.SysFont('freesansbold.ttf', 80)
-        instrucfont = pygame.font.SysFont('freesansbold.ttf', 50)
-        nlabel = myfont.render('Press R to start', 2, L_GREEN)
-        instruction_1 = instrucfont.render('Press arrow key to move', 1, WHITE)
-        instruction_2 = instrucfont.render('Press Z to shoot', 1, WHITE)
-        screen.blit(nlabel, (150, 230))
-        screen.blit(instruction_1, (60, 700))
-        screen.blit(instruction_2, (60, 750))
-        pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # If user clicked close
                 done = True
@@ -638,7 +643,6 @@ while done is False:
                     time = 0
                     bgtime = 0
                     game_end = False
-                    game_start = False
 
     # --- Main event loop
     for event in pygame.event.get():  # User did something
@@ -652,15 +656,6 @@ while done is False:
     # --- background reset
     if bgtime == 900:
         bgtime = 0
-    # --- Enemy generation code for testing
-    ##    enemytype1()
-    ##    enemytype2()
-    ##    enemytype3()
-    ##    enemytype4()
-    # enemytower()
-    # if time == 1:
-    #     enemyboss1()
-    # enemytype6()
 
     # --- Level 1 process
     if time <= 1200:
@@ -678,27 +673,13 @@ while done is False:
     elif time == 7401:
         enemyboss1()
 
-    # # --- Endless level process
-    # if time%1200 == 0:
-    #     random_type = random.randint(1, 5)
-    #     if random_type == 1:
-    #         enemytype5()
-    #     if random_type == 2:
-    #         enemytype6()
-    #     if random_type == 3:
-    #         enemytype7()
-    #     if random_type == 4:
-    #         enemytype8()
-    #     if random_type == 5:
-    #         enemytower()
-
     # --- Enemy Update
     for enemy in enemytest_group:
         enemy.update_90()
     for enemy in enemy1_group:
         enemy.update_180_2()
-    for enemy in enemy2_group:
-        enemy.update_S()
+    for enemy2 in enemy2_group:
+        enemy2.update_S()
     for enemy in enemy3_group:
         enemy.update_Z()
     for enemy in enemy4_group:
@@ -707,8 +688,8 @@ while done is False:
         enemy.update_90()
     for enemy in enemy6_group:
         enemy.update_90_2()
-    for enemy in enemyt_group:
-        enemy.update_T()
+    for enemyt in enemyt_group:
+        enemyt.update_T()
     for boss in boss_group:
         boss.update_boss()
 
@@ -728,21 +709,14 @@ while done is False:
     p_bullet = Bullet()
     # if player.playershoot == True:
     #     p_bullet = Bullet()
-    #     p_bullet.image = pygame.image.load("pb.png").convert_alpha()
+    #     p_bullet.image = pygame.image.load("gym_raiden/envs/resources/pb.png").convert_alpha()
     #     if time % p_bullet.gap == 0:
     #         p_bullet.rect.x = player.rect.centerx-3
     #         p_bullet.rect.y = player.rect.centery-18
     #         p_bullet_group.add(p_bullet)
     #         allSprites.add(p_bullet)
-    ##                pygame.mixer.music.load("shoot.mp3")
-    ##                pygame.mixer.music.play(-1)
-
-    # --- Enemy bullet generation code
-    ##    if enemy4.enemyshoot == True:
-    ##        en_bullet=en_Bullet()
-    ##        if time%en_bullet.gap == 0:
-    ##            en_bullet.rect.x = enemy4.rect.x
-    ##            en_bullet.rect.y = enemy4.rect.y
+    # #                pygame.mixer.music.load("gym_raiden/envs/resources/shoot.mp3")
+    # #                pygame.mixer.music.play(-1)
 
     # --- Remove bullet outside the screen
     for bullet in p_bullet_group:
@@ -904,11 +878,6 @@ while done is False:
 
     # --- high score system
 
-    # --- Blit screens
-    p_score = instrucfont.render('Score:' + str(player.score), 1, N_BLUE)
-    p_live = instrucfont.render('Live:' + str(player.live), 1, N_BLUE)
-    p_hp = instrucfont.render('HP:' + str(player.hp) + '/100', 1, N_BLUE)
-
     # --- All debugging code
     ##    print(player.hp)
     ##    print(player.live)
@@ -916,7 +885,7 @@ while done is False:
     ##    print('start:'+str(game_start))
 
     # --- Screen-clearing code goes here
-    screen.fill(BLACK)
+    # screen.fill(BLACK)
     # Here, we clear the screen to white. Don't put other drawing commands
     # above this, or they will be erased with this command.
 
@@ -941,25 +910,51 @@ while done is False:
     # --- Drawing code should go here
 
     # --- Background scrolling
-    screen.blit(back, (0, bgtime))
-    screen.blit(back, (0, bgtime - 900))
-
-    screen.blit(p_score, (15, 20))
-    screen.blit(p_hp, (300, 20))
-    screen.blit(p_live, (580, 20))
+    # screen.blit(back, (0, bgtime))
+    # screen.blit(back, (0, bgtime - 900))
+    #
+    # screen.blit(p_score, (15, 20))
+    # screen.blit(p_hp, (300, 20))
+    # screen.blit(p_live, (580, 20))
 
     ##    background1=background()
     ##    background1.scroll(0,1)
 
     ##    background1.update_Up
     allSprites.update()
-    allSprites.draw(screen)
 
     # --- Go ahead and update the screen with what we've drawn.
-    pygame.display.flip()
+    # pygame.display.flip()
 
     # --- Limit to 60 frames per second
     clock.tick(60)
 
+screen, ins_font = render_init(screen)
+while True:
+    step()
+    screen, ins_font = render(ins_font, screen)
+
+
 # Close the window and quit.
 pygame.quit()
+
+
+
+def render_end(screen):
+    screen.fill(WHITE)
+    myfont = pygame.font.SysFont('freesansbold.ttf', 80)
+    instrucfont = pygame.font.SysFont('freesansbold.ttf', 50)
+    nlabel = myfont.render('Press R to start', 2, L_GREEN)
+    instruction_1 = instrucfont.render('Press arrow key to move', 1, WHITE)
+    instruction_2 = instrucfont.render('Press Z to shoot', 1, WHITE)
+    screen.blit(nlabel, (150, 230))
+    screen.blit(instruction_1, (60, 700))
+    screen.blit(instruction_2, (60, 750))
+    pygame.display.flip()
+
+    return screen
+
+
+
+
+
