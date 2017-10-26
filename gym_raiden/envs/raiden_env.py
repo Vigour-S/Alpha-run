@@ -1,7 +1,8 @@
 import gym
-import gym_raiden.envs.alpha as alpha
+from gym_raiden.envs import alpha
 import pygame
 from gym import spaces
+import numpy as np
 
 NUM_GAME_STATUS_STATES = 3
 IN_GAME, WIN, DEAD = list(range(NUM_GAME_STATUS_STATES))
@@ -26,7 +27,7 @@ class Raiden_ENV(gym.Env):
         alpha.step()
         self.status = self.status_update()
         reward = self._get_reward()
-        img_data = pygame.image.tostring(alpha.screen, "RGB")
+        img_data = np.array(pygame.surfarray.pixels3d(alpha.screen))
         episode_over = self.status != IN_GAME
 
         return img_data, reward, episode_over
