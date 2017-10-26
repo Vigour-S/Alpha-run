@@ -20,7 +20,7 @@ class Raiden_ENV(gym.Env):
         self.status = IN_GAME
         self.action_space = spaces.Discrete(8)
         (screen_width, screen_height) = alpha.size
-        self.observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, 3))
+        self.observation_space = spaces.Box(low=0, high=255, shape=(screen_width, screen_height, 3))
 
     def _step(self, action):
         self._take_action(action)
@@ -30,7 +30,7 @@ class Raiden_ENV(gym.Env):
         img_data = np.array(pygame.surfarray.pixels3d(alpha.screen))
         episode_over = self.status != IN_GAME
 
-        return img_data, reward, episode_over
+        return img_data, reward, episode_over, 'action info: ' + ACTION_LOOKUP[action]
 
     def status_update(self):
         if alpha.player.live <= 0:
