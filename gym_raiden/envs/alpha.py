@@ -2,6 +2,7 @@ import pygame
 import random
 import math
 import os
+import numpy as np
 
 pygame.init()
 
@@ -599,7 +600,7 @@ def render_init(s):
     s.blit(instruction_2, (60, 750))
     pygame.display.flip()
 
-    return s, instrucfont
+    return np.array(pygame.surfarray.pixels3d(s))
 
 
 def render(instrucfont, s):

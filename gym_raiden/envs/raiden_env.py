@@ -63,7 +63,7 @@ class Raiden_ENV(gym.Env):
         elif action_type == 'down_right':
             alpha.player.moveY(5)
             alpha.player.moveX(5)
-        elif action_type == 'still':
+        elif action_type == 'noop':
             pass
         else:
             print('Unrecognized action %s' % action_type)
@@ -71,7 +71,6 @@ class Raiden_ENV(gym.Env):
 
     def _get_reward(self):
         """ Reward is achieving score minus the score got in previous step. """
-        print(alpha.reward)
         return alpha.reward
 
     def _reset(self):
