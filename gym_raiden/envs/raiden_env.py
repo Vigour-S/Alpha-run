@@ -70,8 +70,9 @@ class Raiden_ENV(gym.Env):
         alpha.player.playershoot = True
 
     def _get_reward(self):
-        """ Reward is achieving score. """
-        return alpha.player.score
+        """ Reward is achieving score minus the score got in previous step. """
+        print(alpha.reward)
+        return alpha.reward
 
     def _reset(self):
         alpha.game_end = False

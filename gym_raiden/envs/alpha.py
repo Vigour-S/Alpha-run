@@ -36,7 +36,7 @@ y_speed = 0
 x_coord = 350  # initial value of player coordinate x
 y_coord = 800  # initial value of player coordinate y
 
-myscore = 0  # set the initial value of player score to zero
+reward = 0  # reward for one step
 
 en_x_speed = 1
 en_y_speed = 1
@@ -626,7 +626,8 @@ def render(instrucfont, s):
 
 def step(hitbox=hitbox):
 
-    global game_end, time, bgtime
+    global game_end, time, bgtime, reward
+    current_score = player.score
 
     # --- Start screen that will display instructions
     while game_end == True:
@@ -875,6 +876,8 @@ def step(hitbox=hitbox):
 
     if player.live <= 0:
         game_end = True
+
+    reward = player.score - current_score
 
     ##    # --- Level up due to score
     ##    if player.score % 20 == 0 and player.score > 0:
