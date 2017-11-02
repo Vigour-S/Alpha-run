@@ -594,7 +594,7 @@ def reset():
         time, bgtime, player_group, clock, allSprites, \
         hitbox, enemytest_group, enemy1_group, enemy2_group, \
         enemy3_group, enemy4_group, enemy5_group, enemy6_group, \
-        enemyt_group, boss_group, hitbox_group
+        enemyt_group, boss_group, hitbox_group, reward
 
     player_group = pygame.sprite.Group()
     clock = pygame.time.Clock()
@@ -620,6 +620,7 @@ def reset():
     allSprites.add(player)
     time = 0
     bgtime = 0
+    reward = 0
 
 
 def step(hitbox=hitbox):
