@@ -51,24 +51,9 @@ game_start = True
 game_end = False
 enemy_pic = path + "/resources/a-01.png"  # default image for enemy
 
-# --- background music
-##pygame.mixer.music.load(path + "/resources/level1.mp3")  # play music as soon as the game start
-##pygame.mixer.music.play(-1)  # loop around if music ends
-
-
 # --- background image
 back = pygame.image.load(b1).convert()
 back2 = pygame.image.load(b1).convert()
-
-
-##class background(pygame.sprite.Sprite):
-##    def __init__(self):
-##        pygame.sprite.Sprite.__init__(self)
-##        self.image = pygame.image.load(path + "/resources/background.png").convert()
-##        self.rect = self.image.get_rect()
-##
-##    def update_Up(self):
-##        self.rect.y+=1
 
 # --- Classes
 class Player(pygame.sprite.Sprite):
@@ -190,7 +175,7 @@ class Player(pygame.sprite.Sprite):
         #         self.playershoot = False
 
 
-class hitbox(pygame.sprite.Sprite):
+class Hitbox(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(path + "/resources/hitbox.png").convert()
@@ -399,25 +384,12 @@ boss_group = pygame.sprite.Group()
 p_bullet_group = pygame.sprite.Group()
 en_bullet1_group = pygame.sprite.Group()
 # --- generation of player and hitbox
-hitbox = hitbox()
+hitbox = Hitbox()
 hitbox_group.add(hitbox)
 allSprites.add(hitbox)
 player = Player()
 player_group.add(player)
 allSprites.add(player)
-##background1 = background()
-##backgroud_list = pygame.sprite.Group()
-##allSprites.add(background1)
-
-
-##for x in range(0,600,100):
-##    enemy_object=Enemy()
-##    enemy_object.rect.x=x
-##    enemy_object.rect.y=random.randint(400,650)
-##    allSprites.add(enemy_object)
-##    enemy_group.add(enemy_object)
-##
-
 
 # Loop until the user clicks the close button.
 done = False
@@ -609,21 +581,46 @@ def render(instrucfont, s):
     p_live = instrucfont.render('Live:' + str(player.live), 1, N_BLUE)
     p_hp = instrucfont.render('HP:' + str(player.hp) + '/100', 1, N_BLUE)
 
-    # --- Screen-clearing code goes here
-    s.fill(BLACK)
+    screen.blit(p_score, (15, 20))
+    screen.blit(p_hp, (300, 20))
+    screen.blit(p_live, (580, 20))
 
-    # --- Background scrolling
-    s.blit(back, (0, bgtime))
-    s.blit(back, (0, bgtime - 900))
-
-    s.blit(p_score, (15, 20))
-    s.blit(p_hp, (300, 20))
-    s.blit(p_live, (580, 20))
-
-    allSprites.draw(s)
     pygame.display.flip()
 
     return s, instrucfont
+
+def reset():
+    global p_bullet_group, en_bullet1_group, player, \
+        time, bgtime, player_group, clock, allSprites, \
+        hitbox, enemytest_group, enemy1_group, enemy2_group, \
+        enemy3_group, enemy4_group, enemy5_group, enemy6_group, \
+        enemyt_group, boss_group, hitbox_group
+
+    player_group = pygame.sprite.Group()
+    clock = pygame.time.Clock()
+    allSprites = pygame.sprite.Group()
+    hitbox_group = pygame.sprite.Group()
+    enemytest_group = pygame.sprite.Group()
+    enemy1_group = pygame.sprite.Group()
+    enemy2_group = pygame.sprite.Group()
+    enemy3_group = pygame.sprite.Group()
+    enemy4_group = pygame.sprite.Group()
+    enemy5_group = pygame.sprite.Group()
+    enemy6_group = pygame.sprite.Group()
+    enemyt_group = pygame.sprite.Group()
+    boss_group = pygame.sprite.Group()
+    p_bullet_group = pygame.sprite.Group()
+    en_bullet1_group = pygame.sprite.Group()
+    # --- generation of player and hitbox
+    hitbox = Hitbox()
+    hitbox_group.add(hitbox)
+    allSprites.add(hitbox)
+    player = Player()
+    player_group.add(player)
+    allSprites.add(player)
+    time = 0
+    bgtime = 0
+
 
 def step(hitbox=hitbox):
 
@@ -632,6 +629,7 @@ def step(hitbox=hitbox):
 
     # --- Start screen that will display instructions
     while game_end == True:
+        print("game end")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # If user clicked close
                 done = True
@@ -895,49 +893,25 @@ def step(hitbox=hitbox):
     ##    print('start:'+str(game_start))
 
     # --- Screen-clearing code goes here
-    # screen.fill(BLACK)
-    # Here, we clear the screen to white. Don't put other drawing commands
-    # above this, or they will be erased with this command.
-
-    ##    bullet_collisions=pygame.sprite.groupcollide(enemy_group, p_bullet_list, False, True)
-    ##    if len(bullet_collisions)>0:
-    ##        score=score+10
-    ##    for x in bullet_collisions:
-    ##        x.hp-=p_bullet.damage
-    ##        if x.hp==0:
-    ##            enemy_group.remove(x)
-    ##            allSprites.remove(x)
-    # print(x.rect.x)
-    # print(x.health)
-    # score=len(bullet_collisions)*10
-    # print(score)
-
-    # If you want a background image, replace this clear with blit'ing the
-    # background image.
-
-    ##    background.image = pygame.image.load("background.png").convert()
+    screen.fill(BLACK)
 
     # --- Drawing code should go here
 
-    # --- Background scrolling
+    # # --- Background scrolling
+    # comment this during training
     # screen.blit(back, (0, bgtime))
     # screen.blit(back, (0, bgtime - 900))
-    #
-    # screen.blit(p_score, (15, 20))
-    # screen.blit(p_hp, (300, 20))
-    # screen.blit(p_live, (580, 20))
-
-    ##    background1=background()
-    ##    background1.scroll(0,1)
 
     ##    background1.update_Up
     allSprites.update()
+    allSprites.draw(screen)
 
     # --- Go ahead and update the screen with what we've drawn.
     # pygame.display.flip()
 
     # --- Limit to 60 frames per second
-    clock.tick(60)
+    # used to be 60
+    clock.tick(600)
 
 
 def render_end(screen):

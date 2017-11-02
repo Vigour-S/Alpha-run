@@ -10,7 +10,6 @@ STATUS_STRINGS = {IN_GAME: "InGame",
                   WIN: "Win",
                   DEAD: "Dead"}
 
-
 class Raiden_ENV(gym.Env):
 
     metadata = {'render.modes': ['human']}
@@ -21,6 +20,7 @@ class Raiden_ENV(gym.Env):
         self.action_space = spaces.Discrete(8)
         (screen_width, screen_height) = alpha.size
         self.observation_space = spaces.Box(low=0, high=255, shape=(screen_width, screen_height, 3))
+        self.num_step = 0
 
     def _step(self, action):
         self._take_action(action)
@@ -28,7 +28,16 @@ class Raiden_ENV(gym.Env):
         self.status = self.status_update()
         reward = self._get_reward()
         img_data = np.array(pygame.surfarray.pixels3d(alpha.screen))
+
+        # test if we capture the screen
+        # if self.num_step % 100 == 0:
+        #     size = (700, 900)
+        #     screen = pygame.display.set_mode(size)
+        #     pygame.surfarray.blit_array(screen, img_data)
+        #     pygame.image.save(screen, str(self.num_step / 100) + '.jpg')
+
         episode_over = self.status != IN_GAME
+        self.num_step += 1
 
         return img_data, reward, episode_over, 'action info: ' + ACTION_LOOKUP[action]
 
@@ -75,6 +84,7 @@ class Raiden_ENV(gym.Env):
 
     def _reset(self):
         alpha.game_end = False
+        alpha.reset()
         return alpha.render_init(alpha.screen)
 
     def _render(self, mode='human', close=False):
