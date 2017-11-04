@@ -3,6 +3,7 @@ from gym_raiden.envs import alpha
 import pygame
 from gym import spaces
 import numpy as np
+import copy
 
 NUM_GAME_STATUS_STATES = 3
 IN_GAME, WIN, DEAD = list(range(NUM_GAME_STATUS_STATES))
@@ -14,15 +15,16 @@ class Raiden_ENV(gym.Env):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, frameskip=3):
+    def __init__(self, frameskip=3, compressed_weight=160, compressed_height=210):
         alpha.render_init(alpha.screen)
         self.status = IN_GAME
         self.action_space = spaces.Discrete(8)
-        (screen_width, screen_height) = alpha.size
-        self.observation_space = spaces.Box(low=0, high=255, shape=(screen_width, screen_height, 3))
+        self.observation_space = spaces.Box(low=0, high=255, shape=(compressed_weight, compressed_height, 3))
         self.num_step = 0
         self.num_game = 0
         self.frameskip = frameskip
+        self.compressed_weight = compressed_weight
+        self.compressed_height = compressed_height
 
     def _step(self, action):
         reward = 0
@@ -34,14 +36,13 @@ class Raiden_ENV(gym.Env):
             reward += self._get_reward()
 
         self.status = self.status_update()
-        img_data = np.array(pygame.surfarray.pixels3d(alpha.screen))
+        new_surface = pygame.transform.smoothscale(alpha.screen.copy(), (self.compressed_weight, self.compressed_height))
+        img_data = np.array(pygame.surfarray.pixels3d(new_surface))
 
         # test if we capture the screen
-        # if self.num_step % 100 == 0:
-        #     size = (700, 900)
-        #     screen = pygame.display.set_mode(size)
-        #     pygame.surfarray.blit_array(screen, img_data)
-        #     pygame.image.save(screen, str(self.num_step / 100) + '.jpg')
+        if self.num_step % 100 == 0:
+            pygame.surfarray.blit_array(new_surface, img_data)
+            pygame.image.save(new_surface, str(self.num_step / 100) + '.jpg')
 
         episode_over = self.status != IN_GAME
         self.num_step += 1
@@ -53,6 +54,9 @@ class Raiden_ENV(gym.Env):
             print('score: ', alpha.player.score)
             print('--------')
             self.num_step = 0
+
+        if self.num_step % 100 == 0:
+            print(self.num_step)
 
         return img_data, reward, episode_over, 'action info: ' + ACTION_LOOKUP[action]
 
