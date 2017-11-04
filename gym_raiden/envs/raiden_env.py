@@ -40,9 +40,9 @@ class Raiden_ENV(gym.Env):
         img_data = np.array(pygame.surfarray.pixels3d(new_surface))
 
         # test if we capture the screen
-        if self.num_step % 100 == 0:
-            pygame.surfarray.blit_array(new_surface, img_data)
-            pygame.image.save(new_surface, str(self.num_step / 100) + '.jpg')
+        # if self.num_step % 100 == 0:
+        #     pygame.surfarray.blit_array(new_surface, img_data)
+        #     pygame.image.save(new_surface, str(self.num_step / 100) + '.jpg')
 
         episode_over = self.status != IN_GAME
         self.num_step += 1
@@ -104,7 +104,11 @@ class Raiden_ENV(gym.Env):
     def _reset(self):
         alpha.game_end = False
         alpha.reset()
-        return alpha.render_init(alpha.screen)
+        screen = alpha.render_init(alpha.screen)
+        new_surface = pygame.transform.smoothscale(screen.copy(),
+                                                   (self.compressed_weight, self.compressed_height))
+        img_data = np.array(pygame.surfarray.pixels3d(new_surface))
+        return img_data
 
     def _render(self, mode='human', close=False):
         alpha.render(alpha.instrucfont, alpha.screen)

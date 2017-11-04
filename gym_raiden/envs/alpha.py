@@ -562,17 +562,17 @@ def enemyboss1():
 def render_init(s):
     # Set the width and height of the screen [width, height]
     s.fill(BLACK)
-    myfont = pygame.font.SysFont('freesansbold.ttf', 80)
-    instrucfont = pygame.font.SysFont('freesansbold.ttf', 50)
-    nlabel = myfont.render('Press R to start', 2, L_GREEN)
-    instruction_1 = instrucfont.render('Press arrow key to move', 1, WHITE)
-    instruction_2 = instrucfont.render('Press Z to shoot', 1, WHITE)
-    s.blit(nlabel, (150, 230))
-    s.blit(instruction_1, (60, 700))
-    s.blit(instruction_2, (60, 750))
+    # myfont = pygame.font.SysFont('freesansbold.ttf', 80)
+    # instrucfont = pygame.font.SysFont('freesansbold.ttf', 50)
+    # nlabel = myfont.render('Press R to start', 2, L_GREEN)
+    # instruction_1 = instrucfont.render('Press arrow key to move', 1, WHITE)
+    # instruction_2 = instrucfont.render('Press Z to shoot', 1, WHITE)
+    # s.blit(nlabel, (150, 230))
+    # s.blit(instruction_1, (60, 700))
+    # s.blit(instruction_2, (60, 750))
     pygame.display.flip()
 
-    return np.array(pygame.surfarray.pixels3d(s))
+    return s
 
 
 def render(instrucfont, s):
