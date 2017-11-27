@@ -626,7 +626,9 @@ def reset():
 def step(hitbox=hitbox):
 
     global game_end, time, bgtime, reward
-    current_score = player.score
+    past_score = player.score
+    past_hp = player.hp
+    past_live = player.live
 
     # --- Start screen that will display instructions
     while game_end == True:
@@ -867,6 +869,8 @@ def step(hitbox=hitbox):
     for hitbox in bullet_hit_player1:
         player.hp -= 10
 
+    reward = player.hp - past_hp
+
     # --- Player damage checking
     if player.hp <= 0:
         player.live -= 1
@@ -877,7 +881,7 @@ def step(hitbox=hitbox):
     if player.live <= 0:
         game_end = True
 
-    reward = player.score - current_score
+    reward += (player.score - past_score)
 
     ##    # --- Level up due to score
     ##    if player.score % 20 == 0 and player.score > 0:

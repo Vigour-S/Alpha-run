@@ -3,7 +3,7 @@ from gym_raiden.envs import alpha
 import pygame
 from gym import spaces
 import numpy as np
-import copy
+from gym.utils import seeding
 
 NUM_GAME_STATUS_STATES = 3
 IN_GAME, WIN, DEAD = list(range(NUM_GAME_STATUS_STATES))
@@ -13,9 +13,9 @@ STATUS_STRINGS = {IN_GAME: "InGame",
 
 class Raiden_ENV(gym.Env):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', 'rgb_array']}
 
-    def __init__(self, frameskip=3, compressed_weight=160, compressed_height=210):
+    def __init__(self, game='Raiden', obs_type='image', frameskip=3, repeat_action_probability=0., compressed_weight=160, compressed_height=210):
         alpha.render_init(alpha.screen)
         self.status = IN_GAME
         self.action_space = spaces.Discrete(8)
@@ -25,21 +25,23 @@ class Raiden_ENV(gym.Env):
         self.frameskip = frameskip
         self.compressed_weight = compressed_weight
         self.compressed_height = compressed_height
+        self._obs_type = obs_type
 
     def _step(self, action):
-        reward = 0
+        reward = 0.0
         for _ in range(self.frameskip):
             if self.status_update() != IN_GAME:
                 break
             self._take_action(action)
             alpha.step()
             reward += self._get_reward()
+        reward += 0.001
 
         self.status = self.status_update()
         new_surface = pygame.transform.smoothscale(alpha.screen.copy(), (self.compressed_weight, self.compressed_height))
         img_data = np.array(pygame.surfarray.pixels3d(new_surface))
 
-        # test if we capture the screen
+        # # test if we capture the screen
         # if self.num_step % 100 == 0:
         #     pygame.surfarray.blit_array(new_surface, img_data)
         #     pygame.image.save(new_surface, str(self.num_step / 100) + '.jpg')
@@ -58,7 +60,8 @@ class Raiden_ENV(gym.Env):
         if self.num_step % 100 == 0:
             print(self.num_step)
 
-        return img_data, reward, episode_over, 'action info: ' + ACTION_LOOKUP[action]
+        # return format: observation space, reward amount, episode over or not, additional info (must be a dict)
+        return img_data, reward, episode_over, {"player lives": alpha.player.live}
 
     def status_update(self):
         if alpha.player.live <= 0:
