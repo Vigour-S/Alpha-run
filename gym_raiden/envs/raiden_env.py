@@ -15,7 +15,7 @@ class Raiden_ENV(gym.Env):
 
     metadata = {'render.modes': ['human', 'rgb_array']}
 
-    def __init__(self, game='Raiden', obs_type='image', frameskip=3, repeat_action_probability=0., compressed_weight=160, compressed_height=210):
+    def __init__(self, game='Raiden', obs_type='image', frameskip=1, repeat_action_probability=0., compressed_weight=160, compressed_height=210):
         alpha.render_init(alpha.screen)
         self.status = IN_GAME
         self.action_space = spaces.Discrete(8)
