@@ -197,7 +197,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.y = y_coord
         self.x_speed = 0
         self.y_speed = -12
-        self.dmg = 1
+        self.dmg = 5
         self.levelup = 0
 
     def update(self):
